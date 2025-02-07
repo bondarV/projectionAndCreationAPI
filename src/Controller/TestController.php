@@ -18,41 +18,40 @@ class TestController extends AbstractController
     public const USERS_DATA = [
         [
             'id'    => '1',
-            'email' => 'test1@gmail.com',
-            'name'  => 'John1'
+            'email' => 'ipz234_bno@student.ztu.edu.ua',
+            'name'  => 'Nina'
         ],
         [
             'id'    => '2',
-            'email' => 'test2@gmail.com',
-            'name'  => 'John2'
+            'email' => 'ipz234_buo@student.ztu.edu.ua',
+            'name'  => 'Udiy'
         ],
         [
             'id'    => '3',
-            'email' => 'test3@gmail.com',
-            'name'  => 'John3'
+            'email' => 'ipz234_bso@student.ztu.edu.ua',
+            'name'  => 'Savelii'
         ],
         [
             'id'    => '4',
-            'email' => 'test4@gmail.com',
-            'name'  => 'John4'
+            'email' => 'ipz234_bno@student.ztu.edu.ua',
+            'name'  => 'Nano'
         ],
         [
             'id'    => '5',
-            'email' => 'test5@gmail.com',
-            'name'  => 'John5'
+            'email' => 'ipz234_blo@student.ztu.edu.ua',
+            'name'  => 'Lydia'
         ],
         [
             'id'    => '6',
-            'email' => 'test6@gmail.com',
-            'name'  => 'John6'
+            'email' => 'ipz234_bko@student.ztu.edu.ua',
+            'name'  => 'Kolya'
         ],
         [
             'id'    => '7',
-            'email' => 'test7@gmail.com',
-            'name'  => 'John7'
+            'email' => 'ipz234_bdo@student.ztu.edu.ua',
+            'name'  => 'Daniil'
         ],
     ];
-
     #[Route('/users', name: 'app_collection_users', methods: ['GET'])]
     #[IsGranted("ROLE_ADMIN")]
     public function getCollection(): JsonResponse
@@ -75,20 +74,20 @@ class TestController extends AbstractController
     #[Route('/users', name: 'app_create_users', methods: ['POST'])]
     public function createItem(Request $request): JsonResponse
     {
-        $requestData = json_decode($request->getContent(), true);
+        $requestPayload = json_decode($request->getContent(), true);
 
-        if (!isset($requestData['email'], $requestData['name'])) {
-            throw new UnprocessableEntityHttpException("name and email are required");
+        if (!isset($requestPayload['email'], $requestPayload['name'])) {
+            throw new UnprocessableEntityHttpException("both name and email are required");
         }
 
         // TODO check by regex
 
-        $countOfUsers = count(self::USERS_DATA);
+        $userCount = count(self::USERS_DATA);
 
         $newUser = [
-            'id'    => $countOfUsers + 1,
-            'name'  => $requestData['name'],
-            'email' => $requestData['email']
+            'id'    => $userCount + 1,
+            'name'  => $requestPayload['name'],
+            'email' => $requestPayload['email']
         ];
 
         // TODO add new user to collection
@@ -111,17 +110,17 @@ class TestController extends AbstractController
     #[Route('/users/{id}', name: 'app_update_users', methods: ['PATCH'])]
     public function updateItem(string $id, Request $request): JsonResponse
     {
-        $requestData = json_decode($request->getContent(), true);
+        $requestPayload = json_decode($request->getContent(), true);
 
-        if (!isset($requestData['name'])) {
-            throw new UnprocessableEntityHttpException("name is required");
+        if (!isset($requestPayload['name'])) {
+            throw new UnprocessableEntityHttpException("name is necessarily required");
         }
 
         $userData = $this->findUserById($id);
 
         // TODO update user name
 
-        $userData['name'] = $requestData['name'];
+        $userData['name'] = $requestPayload['name'];
 
         return new JsonResponse(['data' => $userData], Response::HTTP_OK);
     }
